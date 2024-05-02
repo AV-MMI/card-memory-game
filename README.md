@@ -1,8 +1,36 @@
-# React + Vite
+# Memory card project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project overview
+ A simple game in which you must click each time an unique artwork!
 
-Currently, two official plugins are available:
+ ## requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### functional requirements
+1. The user should be capable of alterning themes: light/dark
+    - The system should use by default the current theme of the user
+
+2. Should include a scoreboard that contains:
+    - A "board" which is where all our cards are gonna be placed
+        - Cards:
+            - when a card is clicked we mark it
+            - when a card is clicked all the cards of the board should rearrange randomly
+            - each card contains an info menu that contains:
+                - author of the artwork
+                - title of the artwork
+                - department
+                - option to view in official page
+        
+    - Hints button: the user has 2 hints by default. Each time it is clicked it highlight
+    a card that hasn't been clicked
+
+    - A section that displays the scores:
+        - current score
+        - best score: which shows the highest score you’ve achieved thus far
+        - button to reset best score
+
+### UI requirements
+1. Dark/Light theme
+2. Board where the user can play
+3. Score board with option to reset it
+4. Auto save / no save button: that allow to save automatically when the user makes a determined or "flagged" action.
+

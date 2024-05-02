@@ -61,17 +61,7 @@ function App() {
           setDarkTheme(!darkTheme)}} >{(darkTheme ? 'Light Theme' : 'Dark Theme')}</button>
       </nav>
 
-
-      <div className="flex flex-col min-h-4/6 w-5/6 m-auto mt-3">
-          <Board objArr={cardsDataArr}/>
-        <div className="flex flex-row items-center justify-start">
-          <div className="flex flex-col">
-            <span></span>
-          </div>
-          <button>papa</button>
-          <button> heladoss</button>
-        </div>
-      </div>
+      <Board objsArr={cardsDataArr}/>
 
       <footer className="footer p-1 bg-base-300 flex justify-center absolute bottom-0">
         <div>

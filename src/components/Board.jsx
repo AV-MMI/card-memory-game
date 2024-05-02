@@ -2,8 +2,10 @@ import { useRef, useState } from "react";
 import { RowTuple } from "./RowTuple";
 export { Board }
 
-function Board({objArr, cardSize}){
-    const [objsArr, setObjsArr] = useState(objArr);
+function Board({objsArr, cardSize}){
+    const [cardsObjArr, setCardsObjArr] = useState(objArr);
+    const currentScore = useRef(null);
+    const maxScore = useRef(null);
     /*
     from : [{},{},{},{}, ...]
     to: [ [{},{}], [{}, {}], ...]
@@ -23,8 +25,12 @@ function Board({objArr, cardSize}){
         return outputArr;
     }
 
-    let rowsTuple = formatObjArr(objsArr).map((tuple) => {
-        return <RowTuple tupleArr={tuple} />
+    const cbSetCardsObjArr(newCardsObjArr){
+        setCardsObjArr(newCardsObjArr);
+    }
+
+    let rowsTuple = formatObjArr(cardsObjArr).map((tuple) => {
+        return <RowTuple tupleArr={tuple} cb={cbSetCardsObjArr}/>
     })
 
     return (
