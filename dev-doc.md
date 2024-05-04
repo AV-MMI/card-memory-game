@@ -1,7 +1,6 @@
 # dev doc
 
 ## functional requirements
-
 localStorage.museMatch = {
     theme: '',
     cardsObjArr: [{...}, {...} ...];
@@ -22,6 +21,7 @@ localStorage.museMatch = {
                 url:'',
                 imgSrc:'',
                 clicked: false,
+                id:00,
             }
             
             2. cardClicked() -> void:
@@ -44,8 +44,47 @@ localStorage.museMatch = {
         3. Button: Auto save / no save
             uses localStorage to save automatically .cards, .theme, .scores, when any of them have changed.
 
-        3. Button: get hint
+        4. Button: get hint
             1. getHint() -> jsx component
             return a card that hasn't been clicked before
 
 
+## components
+
+app -> state: darkTheme(true/false)
+    navheader
+        h1
+        span
+        dark/ligh theme button -> wstate: darkTheme(true/false)
+    board -- comp -> state: cardsObjArr[]
+        card display
+            cards -- comp -> wstate: cardsObjArr[]
+        board optsBar
+            score display
+                current
+                max
+            buttons -- comp
+                reset score
+                auto save / no save
+                get hint
+    footer
+
+
+    board
+    
+app
+    nav
+    board
+        row
+            card
+            card
+            card
+            card
+        row
+            card
+            card
+            card
+            card
+    boardOpts
+        buttons
+    footer
