@@ -25,6 +25,8 @@ function App() {
           id: data.data.id,
         }
 
+        console.log(artwork.id, 'tracckk')
+
         return artworkObj;
 
       } catch (error){
@@ -56,7 +58,7 @@ function App() {
       }
     }
     
-    fetchingArtworks("classic art", 8);
+    fetchingArtworks("realistic art", 8);
 
     
     return () => {
@@ -78,7 +80,7 @@ function App() {
           setDarkTheme(!darkTheme)}} text={(darkTheme ? 'Light Theme' : 'Dark Theme')}/>
       </nav>
 
-      <Board objsArr={cardsDataArr} cardsSize="w-40"className="bg-[#dddddd] text-[#808080] dark:bg-[#181818] dark:text-[#FFDEAD] w-fit m-auto mt-3">
+      <Board objsArr={cardsDataArr} cardsSize="w-52 "className="bg-[#dddddd] text-[#808080] dark:bg-[#181818] dark:text-[#FFDEAD] w-fit m-auto mt-3">
         
       </Board>
 

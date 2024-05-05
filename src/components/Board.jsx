@@ -4,7 +4,7 @@ import { Card } from "./Card";
 export { Board }
 
 // Component
-function Board({objsArr, cardSize, children, className}){
+function Board({objsArr, cardsSize, children, className}){
    let [cardsObjArr, setCardsObjArr] = useState(objsArr);
    let [scoreObj, setScoreObj] = useState({
     'current': 0,
@@ -17,10 +17,10 @@ function Board({objsArr, cardSize, children, className}){
             <div className={`space-y-4 p-4`}>
                 <div className="flex space-x-4">{rowCardsObj[0].map((obj) => {
                     console.log(obj.imgUrl, 'qlq')
-                    return <Card imgUrl={obj.imgUrl} key={obj.id} title={obj.title} author={obj.author}/>
+                    return <Card size={cardsSize} obj={obj}/>
                 })}</div>
                 <div className="flex space-x-4">{rowCardsObj[1].map((obj) => {
-                    return <Card imgUrl={obj.imgUrl} key={obj.id} title={obj.title} author={obj.author}/>
+                    return <Card size={cardsSize} obj={obj}/>
                 })}</div>
             </div>
 
