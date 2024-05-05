@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Board } from './components/Board.jsx';
 import { Card } from './components/Card.jsx';
 import { Button } from './components/Button.jsx';
@@ -6,49 +6,50 @@ import './App.css'
 
 function App() {
   const [darkTheme, setDarkTheme] = useState(false);
-  let cardsDataArr = [
-    {
-      title: "Nighthawks",
-      author: "Edward Hopper",
-      src: "https://www.artic.edu/iiif/2/e966799b-97ee-1cc6-bd2f-a94b4b8bb8f9/full/843,/0/default.jpg"
-    },
-    {
-      title: "Water Lilies",
-      author: "Claude Monet",
-      src: "https://www.artic.edu/iiif/2/e966799b-97ee-1cc6-bd2f-a94b4b8bb8f9/full/843,/0/default.jpg"
-    },
-    {
-      title: "The Starry Night",
-      author: "Vincent van Gogh",
-      src: "https://www.artic.edu/iiif/2/e966799b-97ee-1cc6-bd2f-a94b4b8bb8f9/full/843,/0/default.jpg"
-    },
-    {
-      title: "The Scream",
-      author: "Edvard Munch",
-      src: "https://www.artic.edu/iiif/2/e966799b-97ee-1cc6-bd2f-a94b4b8bb8f9/full/843,/0/default.jpg"
-    },
-    {
-      title: "Guernica",
-      author: "Pablo Picasso",
-      src: "https://www.artic.edu/iiif/2/e966799b-97ee-1cc6-bd2f-a94b4b8bb8f9/full/843,/0/default.jpg"
-    },
-    {
-      title: "American Gothic",
-      author: "Grant Wood",
-      src: "https://www.artic.edu/iiif/2/e966799b-97ee-1cc6-bd2f-a94b4b8bb8f9/full/843,/0/default.jpg"
-    },
-    {
-      title: "The Kiss",
-      author: "Gustav Klimt",
-      src: "https://www.artic.edu/iiif/2/e966799b-97ee-1cc6-bd2f-a94b4b8bb8f9/full/843,/0/default.jpg"
-    },
-    {
-      title: "Campbell's Soup Cans",
-      author: "Andy Warhol",
-      src: "https://www.artic.edu/iiif/2/e966799b-97ee-1cc6-bd2f-a94b4b8bb8f9/full/843,/0/default.jpg"
-    }
-  ]
+  let cardsDataArr = useRef([]);
+  useEffect(() => {
+    let ignore = false;
 
+    async function fetchArtwork(artwork){
+      try {
+        let response = await fetch(artwork.api_link);
+        let data = await response.json();
+        
+        let artworkObj = {
+          title: data.data.title,
+          author: data.data.artist_title,
+          imgUrl: `https://www.artic.edu/iiif/2/${data.data.image_id}/full/843,/0/default.jpg`,
+          department: data.data.department_title,
+          clicked: false,
+          id: data.data.id,
+        }
+        cardsDataArr.current.push(artworkObj)
+      } catch (error){
+        console.log(error);
+      }
+    }
+    
+    async function fetchingArtworks(word){
+      if(!ignore){
+        try {
+          let response = await fetch(`https://api.artic.edu/api/v1/artworks/search?q=${word}`)
+          let data = await response.json();
+          data.data.forEach((artwork) => fetchArtwork(artwork))
+        } catch (error) {
+          console.log('No artworks fetched')
+        }
+      }
+    }
+    
+    fetchingArtworks("classic art");
+    
+    return () => {
+      ignore = true;
+    }
+  }, [])
+
+
+  console.log(cardsDataArr.current, 'cards')
 
   return (
     <div className={"relative content w-screen h-screen bg-white dark:bg-[#202020]" + " " +  (darkTheme ? 'dark' : 'false')} >
@@ -62,15 +63,8 @@ function App() {
           setDarkTheme(!darkTheme)}} text={(darkTheme ? 'Light Theme' : 'Dark Theme')}/>
       </nav>
   
-      <Board className="bg-[#dddddd] text-[#808080] dark:bg-[#181818] dark:text-[#FFDEAD] w-fit m-auto mt-3">
-        <Card/>
-        <Card/>
-        <Card/>
-        <Card/>
-        <Card/>
-        <Card/>
-        <Card/>
-        <Card/>
+      <Board objsArr={cardsDataArr} className="bg-[#dddddd] text-[#808080] dark:bg-[#181818] dark:text-[#FFDEAD] w-fit m-auto mt-3">
+        
       </Board>
 
       <footer className="bg-[#D8D8D8] footer p-1 dark:bg-base-300 flex justify-center absolute bottom-0">

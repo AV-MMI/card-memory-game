@@ -6,10 +6,8 @@ export { Card }
 function Card({size="w-60", 
                 title="starry night",
                 author="jane",
-                year,
+                imgUrl="",
                 department,
-                url,
-                imgSrc="https://www.artic.edu/iiif/2/e966799b-97ee-1cc6-bd2f-a94b4b8bb8f9/full/843,/0/default.jpg",
                 clicked,
                 id,
             }){
@@ -36,7 +34,7 @@ function Card({size="w-60",
             <Button className="w-full border-4 border-neutral-400 " onClick={toggleMenu} text="see more" />
         </div>
 
-        <ImageButton src={imgSrc}/>
+        <ImageButton src={imgUrl}/>
         </div>
     )
 }
