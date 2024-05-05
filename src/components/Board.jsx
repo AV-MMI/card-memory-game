@@ -5,7 +5,7 @@ export { Board }
 
 // Component
 function Board({objsArr, cardsSize, className}){
-   let [cardsObjArr, setCardsObjArr] = useState([...objsArr]);
+   let [cardsObjArr, setCardsObjArr] = useState([]);
    let [scoreObj, setScoreObj] = useState({
     'current': 0,
     'max': 0})
@@ -34,14 +34,31 @@ function Board({objsArr, cardsSize, className}){
     }
 
     const handleClickedCard = (e) => {
-        let reference = cardsObjArr.slice();
-        let newArrOrder = shuffle(reference);
-        console.log('ws')
-        setCardsObjArr(newArrOrder)
+        if(!e.target.classList.contains('clicked')){
+            // mark visited
+            let cardId = e.target.getAttribute("data-id");
+            let cloneCardsObjArr = cardsObjArr.slice();
+
+            for(let obj in cloneCardsObjArr){
+                if(cloneCardsObjArr[obj].id == cardId){
+                    cloneCardsObjArr[obj].clicked = true;
+                    e.target.classList.add('clicked');
+
+                    setScoreObj(prevScoreObj => ({
+                        ...prevScoreObj,
+                        current: prevScoreObj.current + 1
+                    }))
+                }
+            }
+
+            // shuffle
+            let newArrOrder = shuffle(cloneCardsObjArr);
+
+            setCardsObjArr(newArrOrder)
+        }
     }
 
     let rowCardsObj = [cardsObjArr.slice(0, ( cardsObjArr.length/2 ) ), cardsObjArr.slice(( cardsObjArr.length/2 ) , cardsObjArr.length) ] 
-    console.log(cardsObjArr, objsArr, 'ws')
     return (
         <div className={`flex flex-row justify-center ${className}`}>
             <div className={`space-y-4 p-4`}>

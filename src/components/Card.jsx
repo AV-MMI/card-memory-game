@@ -30,7 +30,7 @@ function Card({size="w-60",
             <Button className="w-full border-4 border-neutral-400 " onClick={toggleMenu} text="see more" />
         </div>
 
-        <ImageButton src={obj.imgUrl} onClick={onClick} className={size}/>
+        <ImageButton src={obj.imgUrl} id={obj.id} onClick={onClick} className={size}/>
         </div>
     )
 }
