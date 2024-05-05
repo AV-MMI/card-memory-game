@@ -1,26 +1,55 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "./Button";
 import { Card } from "./Card";
 export { Board }
 
 // Component
-function Board({objsArr, cardsSize, children, className}){
-   let [cardsObjArr, setCardsObjArr] = useState(objsArr);
+function Board({objsArr, cardsSize, className}){
+   let [cardsObjArr, setCardsObjArr] = useState([...objsArr]);
    let [scoreObj, setScoreObj] = useState({
     'current': 0,
-    'max': 1})
+    'max': 0})
 
-    console.log(objsArr, 'objsArr')
-    let rowCardsObj = [objsArr.slice(0, ( objsArr.length/2 ) ) ,objsArr.slice(( objsArr.length/2 ) , objsArr.length) ] 
+    useEffect(() => {
+        setCardsObjArr(objsArr);
+    }, [])
+
+    function shuffle(arr) {
+        let array = arr
+        let currentIndex = array.length;
+        
+        // While there remain elements to shuffle...
+        while (currentIndex != 0) {
+      
+          // Pick a remaining element...
+          let randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex--;
+      
+          // And swap it with the current element.
+          [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+
+        return array;
+    }
+
+    const handleClickedCard = (e) => {
+        let reference = cardsObjArr.slice();
+        let newArrOrder = shuffle(reference);
+        console.log('ws')
+        setCardsObjArr(newArrOrder)
+    }
+
+    let rowCardsObj = [cardsObjArr.slice(0, ( cardsObjArr.length/2 ) ), cardsObjArr.slice(( cardsObjArr.length/2 ) , cardsObjArr.length) ] 
+    console.log(cardsObjArr, objsArr, 'ws')
     return (
         <div className={`flex flex-row justify-center ${className}`}>
             <div className={`space-y-4 p-4`}>
-                <div className="flex space-x-4">{rowCardsObj[0].map((obj) => {
-                    console.log(obj.imgUrl, 'qlq')
-                    return <Card size={cardsSize} obj={obj}/>
+                <div className="flex space-x-4 min-h-fit">{rowCardsObj[0].map((obj) => {
+                    return <Card key={obj.id} size={cardsSize} obj={obj} onClick={handleClickedCard}/>
                 })}</div>
-                <div className="flex space-x-4">{rowCardsObj[1].map((obj) => {
-                    return <Card size={cardsSize} obj={obj}/>
+                <div className="flex space-x-4 min-h-fit">{rowCardsObj[1].map((obj) => {
+                    return <Card key={obj.id} size={cardsSize} obj={obj} onClick={handleClickedCard}/>
                 })}</div>
             </div>
 

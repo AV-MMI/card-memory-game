@@ -80,7 +80,7 @@ function App() {
           setDarkTheme(!darkTheme)}} text={(darkTheme ? 'Light Theme' : 'Dark Theme')}/>
       </nav>
 
-      <Board objsArr={cardsDataArr} cardsSize="w-52 "className="bg-[#dddddd] text-[#808080] dark:bg-[#181818] dark:text-[#FFDEAD] w-fit m-auto mt-3">
+      <Board objsArr={cardsDataArr} cardsSize="w-52 "className="bg-[#dddddd] text-[#808080] dark:bg-[#181818] dark:text-[#FFDEAD] w-fit h-fit m-auto mt-3">
         
       </Board>
 
