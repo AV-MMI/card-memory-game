@@ -22,6 +22,7 @@ function Card({size="w-60",
 
         e.stopPropagation();
     }
+    console.log(imgUrl, 'imgUrl')
 
     return (
         <div className={`p-0 card-compact relative rounded-lg shadow-2lx border-2 border-neutral-300 ${size}`}>

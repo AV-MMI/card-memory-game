@@ -6,11 +6,12 @@ import './App.css'
 
 function App() {
   const [darkTheme, setDarkTheme] = useState(false);
-  let cardsDataArr = useRef([]);
+  let [cardsDataArr, setCardsDataArr] = useState([]);
   useEffect(() => {
     let ignore = false;
 
-    async function fetchArtwork(artwork){
+    // helper function: gets passed an artwork promise and returns an artworkObj
+    async function fetchArtworkObj(artwork){
       try {
         let response = await fetch(artwork.api_link);
         let data = await response.json();
@@ -23,25 +24,40 @@ function App() {
           clicked: false,
           id: data.data.id,
         }
-        cardsDataArr.current.push(artworkObj)
+
+        return artworkObj;
+
       } catch (error){
-        console.log(error);
+        console.log(error, 'error');
       }
     }
     
-    async function fetchingArtworks(word){
+
+    // fetch a list of artworks related to the word param, limited by the limit param 
+    // and returns an array of artworksObj
+    async function fetchingArtworks(word, limit){
       if(!ignore){
         try {
           let response = await fetch(`https://api.artic.edu/api/v1/artworks/search?q=${word}`)
           let data = await response.json();
-          data.data.forEach((artwork) => fetchArtwork(artwork))
+          let artworksObjsArr = [];
+
+          let artworksPromiseArr = Promise.all(data.data.map(async (artwork) => {
+              let artworkObj = await fetchArtworkObj(artwork)
+              return artworkObj
+
+          }))
+
+          artworksObjsArr = await artworksPromiseArr;
+          setCardsDataArr(artworksObjsArr.slice(0, limit))
         } catch (error) {
-          console.log('No artworks fetched')
+          console.log('No artworks fetched', error)
         }
       }
     }
     
-    fetchingArtworks("classic art");
+    fetchingArtworks("classic art", 8);
+
     
     return () => {
       ignore = true;
@@ -49,7 +65,6 @@ function App() {
   }, [])
 
 
-  console.log(cardsDataArr.current, 'cards')
 
   return (
     <div className={"relative content w-screen h-screen bg-white dark:bg-[#202020]" + " " +  (darkTheme ? 'dark' : 'false')} >
@@ -62,8 +77,8 @@ function App() {
           e.stopPropagation();
           setDarkTheme(!darkTheme)}} text={(darkTheme ? 'Light Theme' : 'Dark Theme')}/>
       </nav>
-  
-      <Board objsArr={cardsDataArr} className="bg-[#dddddd] text-[#808080] dark:bg-[#181818] dark:text-[#FFDEAD] w-fit m-auto mt-3">
+
+      <Board objsArr={cardsDataArr} cardsSize="w-40"className="bg-[#dddddd] text-[#808080] dark:bg-[#181818] dark:text-[#FFDEAD] w-fit m-auto mt-3">
         
       </Board>
 
