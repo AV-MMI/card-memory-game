@@ -20,7 +20,7 @@
                 - department
                 - option to view in official page
         
-    - Hints button: the user has 2 hints by default. Each time it is clicked it highlight
+    - Hints button: Each time it is clicked it highlight
     a card that hasn't been clicked
 
     - A section that displays the scores:
@@ -32,5 +32,3 @@
 1. Dark/Light theme
 2. Board where the user can play
 3. Score board with option to reset it
-4. Auto save / no save button: that allow to save automatically when the user makes a determined or "flagged" action.
-

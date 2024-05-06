@@ -28,14 +28,11 @@ function Board({objsArr, cardsSize, className}){
             cloneCardsObjArr[obj].highlight = false;
         }
 
-        hints.current = 2;
-
         let newArrOrder = shuffle(cloneCardsObjArr);
         setCardsObjArr(newArrOrder);
-
-        console.log('game resset')
     }
 
+    // returns a radomly sorted array
     function shuffle(arr) {
         let array = arr
         let currentIndex = array.length;
@@ -74,9 +71,12 @@ function Board({objsArr, cardsSize, className}){
     const handleClickedCard = (e) => {
         let cardId = e.target.getAttribute("data-id");
         let cloneCardsObjArr = cardsObjArr.slice();
-
+        
+        // get cards and correspondent card obj
         for(let card in cloneCardsObjArr){
+            // found card clicked
             if(cloneCardsObjArr[card].id == cardId){
+                    // card has never been clicked
                 if(!cloneCardsObjArr[card].clicked){
                     cloneCardsObjArr[card].clicked = true;
                     cloneCardsObjArr[card].highlight = false;
@@ -88,12 +88,29 @@ function Board({objsArr, cardsSize, className}){
 
                 // shuffle
                 let newArrOrder = shuffle(cloneCardsObjArr);
-                setCardsObjArr(newArrOrder)
-                } 
-                
-                else if(cloneCardsObjArr[card].clicked){
-                    resetGame();
+                setCardsObjArr(newArrOrder);
+                return;
                 }
+
+                    // card has been clicked before
+                else if(cloneCardsObjArr[card].clicked){
+                        // reset current score and set max (if needed)
+                    setScoreObj(prevScoreObj => ({
+                            current: 0,
+                            max: (prevScoreObj.current > prevScoreObj.max ? prevScoreObj.current : prevScoreObj.max)
+                    }))
+
+                        // shuffle and "restart" card obj
+                let newArrOrder = cloneCardsObjArr.slice();   
+                newArrOrder.map((card) => {
+                    card.clicked = false;
+                    card.highlight = false;
+                })
+
+                setCardsObjArr( shuffle(newArrOrder) )
+                return;
+                }
+                
             }
         }
     }
@@ -113,8 +130,8 @@ function Board({objsArr, cardsSize, className}){
             <div className="flex flex-col h-fit p-4 space-y-3">
                 <span>current score: {scoreObj.current}</span>
                 <span>maximum score: {scoreObj.max}</span>
-                <Button text="reset scores" onClick={resetGame}></Button>
-                <Button text={ hints.current + " Hints"} onClick={handleHint}></Button>
+                <Button text="Reset scores" onClick={resetGame}></Button>
+                <Button text="Hint!" onClick={handleHint}></Button>
             </div>
         </div>
    )

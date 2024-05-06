@@ -1,12 +1,6 @@
 # dev doc
 
 ## functional requirements
-localStorage.museMatch = {
-    theme: '',
-    cardsObjArr: [{...}, {...} ...];
-    cardsObjComponents [<jsx>, <jsx>, ...];
-}
-
 1. toggleTheme():
     toggle the current theme from dark to light or light to dark
 
@@ -21,7 +15,8 @@ localStorage.museMatch = {
                 url:'',
                 imgSrc:'',
                 clicked: false,
-                id:00,
+                id:'',
+                highlight: false,
             }
             
             2. cardClicked() -> void:
@@ -39,14 +34,10 @@ localStorage.museMatch = {
         
         2. Button: reset score
             resets current score and max score
-            1. updateLocalStorage obj
 
-        3. Button: Auto save / no save
-            uses localStorage to save automatically .cards, .theme, .scores, when any of them have changed.
-
-        4. Button: get hint
-            1. getHint() -> jsx component
-            return a card that hasn't been clicked before
+        3. Button: Hint
+            1. handleHint() -> void
+            
 
 
 ## components

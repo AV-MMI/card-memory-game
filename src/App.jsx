@@ -26,8 +26,6 @@ function App() {
           highlight: false,
         }
 
-        console.log(artwork.id, 'tracckk')
-
         return artworkObj;
 
       } catch (error){
