@@ -25,11 +25,15 @@ function Board({objsArr, cardsSize, className}){
         let cloneCardsObjArr = cardsObjArr.slice();
         for(let obj in cloneCardsObjArr){
             cloneCardsObjArr[obj].clicked = false;
+            cloneCardsObjArr[obj].highlight = false;
         }
 
         hints.current = 2;
 
-        setCardsObjArr(cloneCardsObjArr);
+        let newArrOrder = shuffle(cloneCardsObjArr);
+        setCardsObjArr(newArrOrder);
+
+        console.log('game resset')
     }
 
     function shuffle(arr) {
@@ -71,39 +75,24 @@ function Board({objsArr, cardsSize, className}){
         let cardId = e.target.getAttribute("data-id");
         let cloneCardsObjArr = cardsObjArr.slice();
 
-        if(!e.target.classList.contains('clicked')){
-            // mark visited
-            for(let obj in cloneCardsObjArr){
-                if(cloneCardsObjArr[obj].id == cardId){
-                    cloneCardsObjArr[obj].clicked = true;
-                    cloneCardsObjArr[obj].highlight = false;
-
-                    e.target.classList.add('clicked');
+        for(let card in cloneCardsObjArr){
+            if(cloneCardsObjArr[card].id == cardId){
+                if(!cloneCardsObjArr[card].clicked){
+                    cloneCardsObjArr[card].clicked = true;
+                    cloneCardsObjArr[card].highlight = false;
 
                     setScoreObj(prevScoreObj => ({
                         ...prevScoreObj,
                         current: prevScoreObj.current + 1
-                    }))
-                }
-            }
+                }))
 
-            // shuffle
-            let newArrOrder = shuffle(cloneCardsObjArr);
-
-            setCardsObjArr(newArrOrder)
-        } 
-        else if(e.target.classList.contains('clicked')){
-            for(let obj in cloneCardsObjArr){
-                cloneCardsObjArr.clicked = false;
-
-                if(cloneCardsObjArr[obj].id == cardId){
-
-                    setScoreObj(prevScoreObj => ({
-                        ...prevScoreObj,
-                        max: (prevScoreObj.current > prevScoreObj.max ? prevScoreObj.current : prevScoreObj.max),
-                        current: 0
-                    }))
-
+                // shuffle
+                let newArrOrder = shuffle(cloneCardsObjArr);
+                setCardsObjArr(newArrOrder)
+                } 
+                
+                else if(cloneCardsObjArr[card].clicked){
+                    resetGame();
                 }
             }
         }
