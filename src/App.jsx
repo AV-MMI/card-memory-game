@@ -23,6 +23,7 @@ function App() {
           department: data.data.department_title,
           clicked: false,
           id: data.data.id,
+          highlight: false,
         }
 
         console.log(artwork.id, 'tracckk')

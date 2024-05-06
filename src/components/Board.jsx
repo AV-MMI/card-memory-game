@@ -6,13 +6,31 @@ export { Board }
 // Component
 function Board({objsArr, cardsSize, className}){
    let [cardsObjArr, setCardsObjArr] = useState([]);
+   let hints = useRef([2])
    let [scoreObj, setScoreObj] = useState({
     'current': 0,
-    'max': 0})
+    'max': 0
+})
 
     useEffect(() => {
         setCardsObjArr(objsArr);
-    }, [])
+    }, [objsArr])
+
+    function resetGame() {
+        setScoreObj({
+            current: 0,
+            max: 0
+        })
+
+        let cloneCardsObjArr = cardsObjArr.slice();
+        for(let obj in cloneCardsObjArr){
+            cloneCardsObjArr[obj].clicked = false;
+        }
+
+        hints.current = 2;
+
+        setCardsObjArr(cloneCardsObjArr);
+    }
 
     function shuffle(arr) {
         let array = arr
@@ -33,15 +51,33 @@ function Board({objsArr, cardsSize, className}){
         return array;
     }
 
+    const handleHint = (e) => {
+        if(hints.current > 0){
+        let cloneCardsObjArr = cardsObjArr.slice();
+            // get a no clicked card
+            for(let card in cloneCardsObjArr){
+                if(!cloneCardsObjArr[card].clicked){
+                    // get card component
+                    cloneCardsObjArr[card].highlight = true;
+
+                    setCardsObjArr(cloneCardsObjArr);
+                    return
+                }
+            }
+        }
+    }
+
     const handleClickedCard = (e) => {
+        let cardId = e.target.getAttribute("data-id");
+        let cloneCardsObjArr = cardsObjArr.slice();
+
         if(!e.target.classList.contains('clicked')){
             // mark visited
-            let cardId = e.target.getAttribute("data-id");
-            let cloneCardsObjArr = cardsObjArr.slice();
-
             for(let obj in cloneCardsObjArr){
                 if(cloneCardsObjArr[obj].id == cardId){
                     cloneCardsObjArr[obj].clicked = true;
+                    cloneCardsObjArr[obj].highlight = false;
+
                     e.target.classList.add('clicked');
 
                     setScoreObj(prevScoreObj => ({
@@ -55,6 +91,21 @@ function Board({objsArr, cardsSize, className}){
             let newArrOrder = shuffle(cloneCardsObjArr);
 
             setCardsObjArr(newArrOrder)
+        } 
+        else if(e.target.classList.contains('clicked')){
+            for(let obj in cloneCardsObjArr){
+                cloneCardsObjArr.clicked = false;
+
+                if(cloneCardsObjArr[obj].id == cardId){
+
+                    setScoreObj(prevScoreObj => ({
+                        ...prevScoreObj,
+                        max: (prevScoreObj.current > prevScoreObj.max ? prevScoreObj.current : prevScoreObj.max),
+                        current: 0
+                    }))
+
+                }
+            }
         }
     }
 
@@ -73,8 +124,8 @@ function Board({objsArr, cardsSize, className}){
             <div className="flex flex-col h-fit p-4 space-y-3">
                 <span>current score: {scoreObj.current}</span>
                 <span>maximum score: {scoreObj.max}</span>
-                <Button text="reset scores"></Button>
-                <Button text="hints!"></Button>
+                <Button text="reset scores" onClick={resetGame}></Button>
+                <Button text={ hints.current + " Hints"} onClick={handleHint}></Button>
             </div>
         </div>
    )
